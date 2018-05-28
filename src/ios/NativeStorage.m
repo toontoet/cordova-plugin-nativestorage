@@ -237,6 +237,11 @@
 		if(reference!=nil)
 		{
 			NSString* aString = [[NSUserDefaults standardUserDefaults] stringForKey:reference];
+
+			// Workaround returning values containing unicode line-ends
+			aString = [aString stringByReplacingOccurrencesOfString:@"\u2028" withString:@""];
+            aString = [aString stringByReplacingOccurrencesOfString:@"\u2029" withString:@""];
+
 			pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsString:aString];
 			if(aString==nil)
 			{

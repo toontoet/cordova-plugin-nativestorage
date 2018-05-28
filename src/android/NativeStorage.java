@@ -315,7 +315,12 @@ public class NativeStorage extends CordovaPlugin {
                         String s = sharedPref.getString(ref, "nativestorage_null");
                         if (s.equals("nativestorage_null")) {
                             callbackContext.error(2);  // item not found
-                        } else callbackContext.success(s);
+                        } else {
+                            // Workaround returning values containing unicode line-ends
+                            s = s.replaceAll("\u2028", "");
+                            s = s.replaceAll("\u2029", "");
+                            callbackContext.success(s);
+                        }
                     } catch (Exception e) {
                         Log.e(TAG, "getItem failed :", e);
                         callbackContext.error(e.getMessage());
